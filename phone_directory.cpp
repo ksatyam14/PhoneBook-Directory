@@ -1,16 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-
-struct node {
-     char name[50];
-     char number[20];
-     struct node* next;
-     struct node* prev;
-};
-
-int strCmp(char s1[], char s2[]) {
+#include <bits/stdc++.h>  
+ 
+#include <chrono>  
+ 
+using namespace std;
+ int compare1(char s1[], char s2[]) 
+{
      int count = 0;
      for(int i=0; s1[i] != '\0'; i++) {
           if(tolower(s1[i]) == tolower(s2[i])) {
@@ -22,7 +16,12 @@ int strCmp(char s1[], char s2[]) {
 
      return count;
 }
-
+struct node {
+     char name[50];
+     char number[20];
+     struct node* next;
+     struct node* prev;
+};
 struct node* root = NULL;
 
 int ischar(char c) {
@@ -135,7 +134,7 @@ void searchByName(char str[]) {
      char name[50], number[20];
      while(temp != NULL) {
           int len = strlen(temp->name);
-          match = strCmp(str, temp->name);
+          match = compare1(str, temp->name);
           if(match == len && match == strLen) {
                push(&searchlist, temp->name, temp->number);
           }
@@ -171,7 +170,7 @@ void searchByNumber(char str[]) {
      char name[50], number[20];
      while(temp != NULL) {
           int len = strlen(temp->number);
-          match = strCmp(str, temp->number);
+          match = compare1(str, temp->number);
           if(match == len && match == strLen) {
                push(&searchlist, temp->name, temp->number);
           }
@@ -277,7 +276,7 @@ void deleteByName(char str[]) {
      char name[50], number[20];
      while(temp != NULL) {
           int len = strlen(temp->name);
-          match = strCmp(str, temp->name);
+          match = compare1(str, temp->name);
           if(match == len && match == strLen) {
                strcpy(name, temp->name);
                strcpy(number, temp->number);
@@ -288,8 +287,10 @@ void deleteByName(char str[]) {
                     temp->prev->next = temp->next;
                if(temp->next != NULL)
                     temp->next->prev = temp->prev;
-
+               if(temp->next==NULL&&temp->prev==NULL)
+                   root=NULL;
                free(temp);
+               break;
           }
           temp = temp->next;
      }
@@ -309,11 +310,12 @@ void deleteByName(char str[]) {
 void deleteByNumber(char str[]) {
      struct node* temp = root;
      int strLen = strlen(str);
+   
      int match = 0, found = 0;
      char name[50], number[20];
      while(temp != NULL) {
           int len = strlen(temp->number);
-          match = strCmp(str, temp->number);
+          match = compare1(str, temp->number);
           if(match == len && match == strLen) {
                strcpy(name, temp->name);
                strcpy(number, temp->number);
@@ -324,12 +326,18 @@ void deleteByNumber(char str[]) {
                     temp->prev->next = temp->next;
                if(temp->next != NULL)
                     temp->next->prev = temp->prev;
-
+               if(temp->next==NULL&&temp->prev==NULL)
+               {
+          
+                    root=NULL;
+                    
+               }
                free(temp);
+               break;
           }
           temp = temp->next;
      }
-
+    
      if(found) {
           printf("\n\n\tContact Deleted : ");
           printf("\n\n\t  Name : %s\n\t  Number : %s", name, number);
@@ -373,8 +381,9 @@ void deleteContact() {
           }
      }
 }
-
-int main() {
+#define fast_cin() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+ 
+void solve(){
      readPhoneBook();
      int choice;
      while(1) {
@@ -395,6 +404,38 @@ int main() {
                case 3: searchContact(); break;
                case 4: deleteContact(); break;
           }
-     }
-     return 0;
+     return ;
+     }   
+}
+ 
+int main()
+{
+    #ifndef ONLINE_JUDGE     
+     freopen ("input.txt", "r ", stdin);   
+     freopen("output.txt", "w", stdout); 
+    #endif  
+                         
+    #ifndef ONLINE_JUDGE
+     freopen("error.txt", "w", stderr);
+    #endif 
+    fast_cin();
+  
+   
+    // fixed();
+    auto begin=chrono::high_resolution_clock::now();
+    
+ 
+ 
+    int t = 1;
+   // cin >> t;
+    
+    while(t--){
+      solve();
+    }
+    auto end=chrono::high_resolution_clock::now();
+    auto duration=chrono::duration_cast<chrono::milliseconds>(end-begin);
+    #ifndef ONLINE_JUDGE
+      cerr << "TIME: "<< duration.count()<<"\n";
+    #endif
+    return 0;
 }
